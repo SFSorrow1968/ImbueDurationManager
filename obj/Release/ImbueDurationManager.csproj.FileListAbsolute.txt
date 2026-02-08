@@ -1,6 +1,0 @@
-D:\Documents\Projects\repos\BS\Imbue Duration Manager\bin\Release\PCVR\ImbueDurationManager\manifest.json
-D:\Documents\Projects\repos\BS\Imbue Duration Manager\bin\Release\PCVR\ImbueDurationManager\ImbueDurationManager.dll
-D:\Documents\Projects\repos\BS\Imbue Duration Manager\obj\Release\ImbueDurationManager.csproj.AssemblyReference.cache
-D:\Documents\Projects\repos\BS\Imbue Duration Manager\obj\Release\ImbueDurationManager.GeneratedMSBuildEditorConfig.editorconfig
-D:\Documents\Projects\repos\BS\Imbue Duration Manager\obj\Release\ImbueDurationManager.csproj.CoreCompileInputs.cache
-D:\Documents\Projects\repos\BS\Imbue Duration Manager\obj\Release\ImbueDurationManager.dll

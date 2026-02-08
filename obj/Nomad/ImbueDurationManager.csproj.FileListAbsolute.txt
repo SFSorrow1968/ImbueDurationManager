@@ -1,6 +1,0 @@
-D:\Documents\Projects\repos\BS\Imbue Duration Manager\bin\Release\Nomad\ImbueDurationManager\manifest.json
-D:\Documents\Projects\repos\BS\Imbue Duration Manager\bin\Release\Nomad\ImbueDurationManager\ImbueDurationManager.dll
-D:\Documents\Projects\repos\BS\Imbue Duration Manager\obj\Nomad\ImbueDurationManager.csproj.AssemblyReference.cache
-D:\Documents\Projects\repos\BS\Imbue Duration Manager\obj\Nomad\ImbueDurationManager.GeneratedMSBuildEditorConfig.editorconfig
-D:\Documents\Projects\repos\BS\Imbue Duration Manager\obj\Nomad\ImbueDurationManager.csproj.CoreCompileInputs.cache
-D:\Documents\Projects\repos\BS\Imbue Duration Manager\obj\Nomad\ImbueDurationManager.dll
