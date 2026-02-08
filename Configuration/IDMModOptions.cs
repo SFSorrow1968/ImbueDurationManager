@@ -34,6 +34,7 @@ namespace ImbueDurationManager.Configuration
         public const string OptionUseNativeInfinite = "Use Native Infinite Flag";
 
         public const string OptionLogLevel = "Log Level";
+        public const string OptionSessionDiagnostics = "Session Diagnostics";
         public const string OptionSummaryInterval = "Summary Interval";
         public const string OptionDumpState = "Dump Runtime State";
         public const string OptionResetTracking = "Reset Tracking";
@@ -104,6 +105,9 @@ namespace ImbueDurationManager.Configuration
 
         [ModOption(name = OptionLogLevel, category = CategoryDiagnostics, categoryOrder = 200, order = 0, defaultValueIndex = 1, valueSourceName = nameof(LogLevelProvider), tooltip = "Controls diagnostics logging verbosity")]
         public static string LogLevel = "Basic";
+
+        [ModOption(name = OptionSessionDiagnostics, category = CategoryDiagnostics, categoryOrder = 200, order = 5, defaultValueIndex = 0, tooltip = "Emit structured session diagnostics summaries even when Log Level is Basic/Off")]
+        public static bool SessionDiagnostics = false;
 
         [ModOption(name = OptionSummaryInterval, category = CategoryDiagnostics, categoryOrder = 200, order = 10, defaultValueIndex = 1, valueSourceName = nameof(SummaryIntervalProvider), interactionType = (ModOption.InteractionType)2, tooltip = "Telemetry summary cadence")]
         public static float SummaryIntervalSeconds = 5f;

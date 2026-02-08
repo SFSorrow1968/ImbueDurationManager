@@ -18,6 +18,7 @@ namespace ImbueDurationManager.Tests
             IDMModOptions.NpcHeldDrainMultiplier = 1.0f;
             IDMModOptions.NpcThrownDrainMultiplier = 1.0f;
             IDMModOptions.WorldDrainMultiplier = 1.0f;
+            IDMModOptions.SessionDiagnostics = false;
         }
 
         [Test]
@@ -25,6 +26,12 @@ namespace ImbueDurationManager.Tests
         {
             Assert.That(IDMModOptions.VERSION, Is.Not.Null.And.Not.Empty);
             Assert.That(IDMModOptions.VERSION, Does.Match("^\\d+\\.\\d+\\.\\d+"));
+        }
+
+        [Test]
+        public void SessionDiagnostics_DefaultsOff()
+        {
+            Assert.That(IDMModOptions.SessionDiagnostics, Is.False);
         }
 
         [Test]
