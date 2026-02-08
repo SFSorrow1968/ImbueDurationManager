@@ -1,0 +1,21 @@
+# Build outputs
+bin/
+obj/
+ImbueDurationManager.Tests/bin/
+ImbueDurationManager.Tests/obj/
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userprefs
+
+# NuGet/packages
+packages/
+*.nupkg
+
+# OS files
+.DS_Store
+Thumbs.db
