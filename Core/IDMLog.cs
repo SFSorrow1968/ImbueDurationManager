@@ -16,6 +16,7 @@ namespace ImbueDurationManager.Core
         private const string Prefix = "[IDM] ";
 
         public static bool DiagnosticsEnabled => GetCurrentLevel() >= IDMLogLevel.Diagnostics;
+        public static bool StructuredDiagnosticsEnabled => DiagnosticsEnabled || IDMModOptions.SessionDiagnostics;
         public static bool VerboseEnabled => GetCurrentLevel() >= IDMLogLevel.Verbose;
 
         public static void Info(string message, bool verboseOnly = false)
@@ -68,6 +69,21 @@ namespace ImbueDurationManager.Core
             }
 
             Debug.LogError(Prefix + message);
+        }
+
+        public static void Diag(string message, bool verboseOnly = false)
+        {
+            if (string.IsNullOrWhiteSpace(message) || !StructuredDiagnosticsEnabled)
+            {
+                return;
+            }
+
+            if (verboseOnly && !VerboseEnabled)
+            {
+                return;
+            }
+
+            Debug.Log(Prefix + message);
         }
 
         private static IDMLogLevel GetCurrentLevel()
