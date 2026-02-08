@@ -16,7 +16,6 @@ namespace ImbueDurationManager.Configuration
         public const string CategoryNpcThrown = "NPC Thrown";
         public const string CategoryWorld = "World / Dropped";
         public const string CategoryDiagnostics = "Advanced";
-        public const string CategoryAdvancedDumps = "Advanced - Dumps";
 
         public const string OptionEnableMod = "Enable Mod";
         public const string OptionPresetDuration = "Duration Experience Preset";
@@ -37,9 +36,6 @@ namespace ImbueDurationManager.Configuration
         public const string OptionEnableBasicLogging = "Basic Logs";
         public const string OptionEnableDiagnosticsLogging = "Diagnostics Logs";
         public const string OptionEnableVerboseLogging = "Verbose Logs";
-        public const string OptionSessionDiagnostics = "Session Diagnostics";
-        public const string OptionSummaryInterval = "Summary Interval";
-        public const string OptionDumpState = "Dump Runtime State";
         public const string OptionResetTracking = "Reset Tracking";
 
         public const string PresetWayLess = "WayLess";
@@ -115,17 +111,7 @@ namespace ImbueDurationManager.Configuration
         [ModOption(name = OptionEnableVerboseLogging, category = CategoryDiagnostics, categoryOrder = 200, order = 4, defaultValueIndex = 0, tooltip = "Enable high-volume per-item and per-imbue logs")]
         public static bool EnableVerboseLogging = false;
 
-        [ModOption(name = OptionSessionDiagnostics, category = CategoryDiagnostics, categoryOrder = 200, order = 6, defaultValueIndex = 0, tooltip = "Emit structured session diagnostics summaries even when other logs are off")]
-        public static bool SessionDiagnostics = false;
-
-        [ModOption(name = OptionSummaryInterval, category = CategoryDiagnostics, categoryOrder = 200, order = 10, defaultValueIndex = 1, valueSourceName = nameof(SummaryIntervalProvider), interactionType = (ModOption.InteractionType)2, tooltip = "Telemetry summary cadence")]
-        public static float SummaryIntervalSeconds = 5f;
-
-        [ModOption(name = OptionDumpState, category = CategoryAdvancedDumps, categoryOrder = 210, order = 10, defaultValueIndex = 0, tooltip = "Print active tracking state to the log")]
-        [ModOptionDontSave]
-        public static bool DumpState;
-
-        [ModOption(name = OptionResetTracking, category = CategoryAdvancedDumps, categoryOrder = 210, order = 20, defaultValueIndex = 0, tooltip = "Clear tracked imbue baseline data")]
+        [ModOption(name = OptionResetTracking, category = CategoryDiagnostics, categoryOrder = 200, order = 20, defaultValueIndex = 0, tooltip = "Clear tracked imbue baseline data")]
         [ModOptionDontSave]
         public static bool ResetTracking;
 
@@ -216,18 +202,6 @@ namespace ImbueDurationManager.Configuration
                 new ModOptionFloat("5%", 5f),
                 new ModOptionFloat("10%", 10f),
                 new ModOptionFloat("15%", 15f),
-            };
-        }
-
-        public static ModOptionFloat[] SummaryIntervalProvider()
-        {
-            return new[]
-            {
-                new ModOptionFloat("2s", 2f),
-                new ModOptionFloat("5s", 5f),
-                new ModOptionFloat("10s", 10f),
-                new ModOptionFloat("15s", 15f),
-                new ModOptionFloat("30s", 30f),
             };
         }
 

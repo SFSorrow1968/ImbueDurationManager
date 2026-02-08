@@ -8,7 +8,7 @@ namespace ImbueDurationManager.Core
         private const string Prefix = "[IDM] ";
 
         public static bool DiagnosticsEnabled => IDMModOptions.EnableDiagnosticsLogging || VerboseEnabled;
-        public static bool StructuredDiagnosticsEnabled => DiagnosticsEnabled || IDMModOptions.SessionDiagnostics;
+        public static bool StructuredDiagnosticsEnabled => DiagnosticsEnabled;
         public static bool VerboseEnabled => IDMModOptions.EnableVerboseLogging;
         public static bool BasicEnabled => IDMModOptions.EnableBasicLogging || DiagnosticsEnabled;
 

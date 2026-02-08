@@ -308,71 +308,9 @@ namespace ImbueDurationManager.Core
                 refreshed = true;
             }
 
-            if (IDMModOptions.DumpState)
-            {
-                IDMModOptions.DumpState = false;
-                DumpState();
-                refreshed = true;
-            }
-
             if (refreshed)
             {
                 ModManager.RefreshModOptionsUI();
-            }
-        }
-
-        private void DumpState()
-        {
-            IDMTelemetry.DumpState(
-                "diagnostics",
-                trackedStates.Count,
-                nativeInfiniteApplied,
-                IDMModOptions.GetSourceOfTruthSummary());
-
-            List<Item> activeItems = Item.allActive;
-            if (activeItems == null)
-            {
-                return;
-            }
-
-            int detailCount = 0;
-            for (int idx = 0; idx < activeItems.Count; idx++)
-            {
-                Item item = activeItems[idx];
-                if (item == null || item.imbues == null || item.imbues.Count == 0)
-                {
-                    continue;
-                }
-
-                IDMModOptions.DrainContext context = ResolveContext(item);
-                float effectiveMultiplier = IDMModOptions.GetEffectiveDrainMultiplier(context);
-
-                string itemId = item.data != null ? item.data.id : (item.itemId ?? item.name ?? "UnknownItem");
-                IDMLog.Info("state_item id=" + itemId + " context=" + context + " effectiveMultiplier=" + effectiveMultiplier.ToString("0.00"), true);
-
-                for (int i = 0; i < item.imbues.Count; i++)
-                {
-                    Imbue imbue = item.imbues[i];
-                    if (imbue == null)
-                    {
-                        continue;
-                    }
-
-                    string spellId = imbue.spellCastBase != null ? imbue.spellCastBase.id : "None";
-                    IDMLog.Info(
-                        "state_imbue item=" + itemId +
-                        " index=" + i +
-                        " spell=" + spellId +
-                        " energy=" + imbue.energy.ToString("0.00") + "/" + imbue.maxEnergy.ToString("0.00"),
-                        true);
-                }
-
-                detailCount++;
-                if (detailCount >= 15)
-                {
-                    IDMLog.Info("state_dump truncated after 15 items.", true);
-                    break;
-                }
             }
         }
 

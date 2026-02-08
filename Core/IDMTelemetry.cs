@@ -8,6 +8,7 @@ namespace ImbueDurationManager.Core
     internal static class IDMTelemetry
     {
         private const float CorrectionLogIntervalSeconds = 0.8f;
+        private const float SummaryIntervalSeconds = 30f;
 
         private static readonly Dictionary<int, float> correctionLogGate = new Dictionary<int, float>();
 
@@ -42,15 +43,14 @@ namespace ImbueDurationManager.Core
             initialized = true;
             sessionStartTime = Time.unscaledTime;
             summaryCount = 0;
-            nextSummaryTime = sessionStartTime + GetSummaryIntervalSeconds();
+            nextSummaryTime = sessionStartTime + SummaryIntervalSeconds;
             ResetIntervalCounters();
             ResetTotals();
 
             IDMLog.Diag(
                 "diag evt=session_start run=" + runId +
                 " presetHash=" + IDMModOptions.GetPresetSelectionHash() +
-                " sourceHash=" + IDMModOptions.GetSourceOfTruthHash() +
-                " sessionDiagnostics=" + IDMModOptions.SessionDiagnostics);
+                " sourceHash=" + IDMModOptions.GetSourceOfTruthHash());
         }
 
         public static void Shutdown()
@@ -79,7 +79,7 @@ namespace ImbueDurationManager.Core
             ResetTotals();
             summaryCount = 0;
             sessionStartTime = Time.unscaledTime;
-            nextSummaryTime = sessionStartTime + GetSummaryIntervalSeconds();
+            nextSummaryTime = sessionStartTime + SummaryIntervalSeconds;
         }
 
         public static void RecordCycle(int cycleItems, int cycleImbues, int cycleAdjustedUp, int cycleAdjustedDown, int cycleUnchanged, int trackedCount, bool nativeInfinite)
@@ -146,18 +146,7 @@ namespace ImbueDurationManager.Core
             }
 
             EmitSummary(force: false);
-            nextSummaryTime = now + GetSummaryIntervalSeconds();
-        }
-
-        public static void DumpState(string reason, int trackedCount, bool nativeInfinite, string sourceOfTruthSummary)
-        {
-            IDMLog.Info(
-                "dump reason=" + reason +
-                " tracked=" + trackedCount +
-                " nativeInfinite=" + nativeInfinite +
-                " sourceOfTruth={" + sourceOfTruthSummary + "}" +
-                " counters={cycles=" + cycles + ",items=" + itemsScanned + ",imbues=" + imbuesScanned + ",up=" + adjustedUp + ",down=" + adjustedDown + ",same=" + unchanged + "}",
-                true);
+            nextSummaryTime = now + SummaryIntervalSeconds;
         }
 
         public static bool ShouldLogCorrection(int imbueId, float now)
@@ -189,7 +178,7 @@ namespace ImbueDurationManager.Core
 
             IDMLog.Diag(
                 "diag evt=summary run=" + runId +
-                " intervalSec=" + GetSummaryIntervalSeconds().ToString("F0") +
+                " intervalSec=" + SummaryIntervalSeconds.ToString("F0") +
                 " cycles=" + cycles +
                 " scannedItems=" + itemsScanned +
                 " scannedImbues=" + imbuesScanned +
@@ -269,9 +258,5 @@ namespace ImbueDurationManager.Core
             totalPeakTracked = 0;
         }
 
-        private static float GetSummaryIntervalSeconds()
-        {
-            return Mathf.Clamp(IDMModOptions.SummaryIntervalSeconds, 1f, 60f);
-        }
     }
 }

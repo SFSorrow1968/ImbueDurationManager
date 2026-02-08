@@ -21,7 +21,6 @@ namespace ImbueDurationManager.Tests
             IDMModOptions.EnableBasicLogging = true;
             IDMModOptions.EnableDiagnosticsLogging = false;
             IDMModOptions.EnableVerboseLogging = false;
-            IDMModOptions.SessionDiagnostics = false;
         }
 
         [Test]
@@ -32,13 +31,7 @@ namespace ImbueDurationManager.Tests
         }
 
         [Test]
-        public void SessionDiagnostics_DefaultsOff()
-        {
-            Assert.That(IDMModOptions.SessionDiagnostics, Is.False);
-        }
-
-        [Test]
-        public void BooleanLogging_DefaultsAreSensible()
+        public void Logging_DefaultsAreSensible()
         {
             Assert.That(IDMModOptions.EnableBasicLogging, Is.True);
             Assert.That(IDMModOptions.EnableDiagnosticsLogging, Is.False);
