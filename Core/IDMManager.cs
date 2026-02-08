@@ -20,6 +20,12 @@ namespace ImbueDurationManager.Core
         private readonly Dictionary<int, TrackedImbueState> trackedStates = new Dictionary<int, TrackedImbueState>();
         private float nextUpdateTime;
         private bool nativeInfiniteApplied;
+        private int stableCyclesWithoutCorrections;
+        private float adaptiveIntervalMultiplier = 1f;
+
+        private const int StableCyclesPerBackoffStep = 6;
+        private const float AdaptiveIntervalStep = 0.5f;
+        private const float MaxAdaptiveIntervalMultiplier = 4f;
 
         private IDMManager()
         {
@@ -29,6 +35,8 @@ namespace ImbueDurationManager.Core
         {
             trackedStates.Clear();
             nextUpdateTime = 0f;
+            stableCyclesWithoutCorrections = 0;
+            adaptiveIntervalMultiplier = 1f;
             SetNativeInfinite(false);
         }
 
@@ -36,6 +44,8 @@ namespace ImbueDurationManager.Core
         {
             trackedStates.Clear();
             nextUpdateTime = 0f;
+            stableCyclesWithoutCorrections = 0;
+            adaptiveIntervalMultiplier = 1f;
             SetNativeInfinite(false);
         }
 
@@ -54,6 +64,8 @@ namespace ImbueDurationManager.Core
                 {
                     trackedStates.Clear();
                 }
+                stableCyclesWithoutCorrections = 0;
+                adaptiveIntervalMultiplier = 1f;
                 return;
             }
 
@@ -63,7 +75,7 @@ namespace ImbueDurationManager.Core
                 return;
             }
 
-            float interval = IDMModOptions.GetUpdateIntervalSeconds();
+            float interval = IDMModOptions.GetUpdateIntervalSeconds() * adaptiveIntervalMultiplier;
             nextUpdateTime = now + interval;
 
             bool shouldNativeInfinite = IDMModOptions.ShouldUseNativeInfinite();
@@ -81,6 +93,7 @@ namespace ImbueDurationManager.Core
             if (activeItems == null || activeItems.Count == 0)
             {
                 trackedStates.Clear();
+                UpdateAdaptiveInterval(scannedImbues: 0, corrections: 0);
                 return;
             }
 
@@ -196,7 +209,38 @@ namespace ImbueDurationManager.Core
             }
 
             CleanupStaleStates(now);
+            UpdateAdaptiveInterval(scannedImbues, adjustedUp + adjustedDown);
             IDMTelemetry.RecordCycle(scannedItems, scannedImbues, adjustedUp, adjustedDown, unchanged, trackedStates.Count, nativeInfiniteApplied);
+        }
+
+        private void UpdateAdaptiveInterval(int scannedImbues, int corrections)
+        {
+            float previousMultiplier = adaptiveIntervalMultiplier;
+
+            if (scannedImbues <= 0 || corrections > 0)
+            {
+                stableCyclesWithoutCorrections = 0;
+                adaptiveIntervalMultiplier = 1f;
+            }
+            else
+            {
+                stableCyclesWithoutCorrections++;
+                if (stableCyclesWithoutCorrections % StableCyclesPerBackoffStep == 0)
+                {
+                    adaptiveIntervalMultiplier = Mathf.Min(
+                        MaxAdaptiveIntervalMultiplier,
+                        adaptiveIntervalMultiplier + AdaptiveIntervalStep);
+                }
+            }
+
+            if (!Mathf.Approximately(previousMultiplier, adaptiveIntervalMultiplier) && IDMLog.DiagnosticsEnabled)
+            {
+                IDMLog.Info(
+                    "adaptive_scan multiplier=" + adaptiveIntervalMultiplier.ToString("0.0") +
+                    " stableCycles=" + stableCyclesWithoutCorrections +
+                    " scannedImbues=" + scannedImbues +
+                    " corrections=" + corrections);
+            }
         }
 
         private void CleanupStaleStates(float now)
