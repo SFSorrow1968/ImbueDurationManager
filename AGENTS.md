@@ -12,3 +12,6 @@ When making changes in this repo:
 - If a themed quirk file does not exist yet, create it with Issue/Context/Solution entries and add it to `QUIRKS.md`.
 - Use a feature branch for every task (for example `agent/<topic>`), and avoid direct work on `main`/`master`.
 - End each substantial task update with a merge reminder that names the active feature branch and target branch.
+- When a user reports an issue, always recommend a specific boolean logging profile first (not generic "turn logs on").
+- For low-noise repro in this repo, start with: `Session Diagnostics=On`, `Basic Logs=Off`, `Diagnostics Logs=Off`, `Verbose Logs=Off`.
+- If the issue needs runtime decision-path detail, enable `Diagnostics Logs=On`; only enable `Verbose Logs=On` for short targeted repro runs.
