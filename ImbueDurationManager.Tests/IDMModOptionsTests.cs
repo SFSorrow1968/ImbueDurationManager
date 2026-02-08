@@ -18,6 +18,9 @@ namespace ImbueDurationManager.Tests
             IDMModOptions.NpcHeldDrainMultiplier = 1.0f;
             IDMModOptions.NpcThrownDrainMultiplier = 1.0f;
             IDMModOptions.WorldDrainMultiplier = 1.0f;
+            IDMModOptions.EnableBasicLogging = true;
+            IDMModOptions.EnableDiagnosticsLogging = false;
+            IDMModOptions.EnableVerboseLogging = false;
             IDMModOptions.SessionDiagnostics = false;
         }
 
@@ -32,6 +35,14 @@ namespace ImbueDurationManager.Tests
         public void SessionDiagnostics_DefaultsOff()
         {
             Assert.That(IDMModOptions.SessionDiagnostics, Is.False);
+        }
+
+        [Test]
+        public void BooleanLogging_DefaultsAreSensible()
+        {
+            Assert.That(IDMModOptions.EnableBasicLogging, Is.True);
+            Assert.That(IDMModOptions.EnableDiagnosticsLogging, Is.False);
+            Assert.That(IDMModOptions.EnableVerboseLogging, Is.False);
         }
 
         [Test]
