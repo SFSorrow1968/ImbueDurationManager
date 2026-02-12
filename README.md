@@ -24,8 +24,8 @@ Imbue Duration Manager controls how long imbues last across the game.
 - `dotnet build ImbueDurationManager.csproj -c Nomad`
 
 Output folders:
-- `bin/Release/PCVR/ImbueDurationManager/`
-- `bin/Release/Nomad/ImbueDurationManager/`
+- `bin/PCVR/ImbueDurationManager/`
+- `bin/Nomad/ImbueDurationManager/`
 
 ## Smoke
 - `powershell -File _agent/ci-smoke.ps1`

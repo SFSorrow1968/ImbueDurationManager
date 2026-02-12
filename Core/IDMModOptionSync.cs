@@ -10,7 +10,6 @@ namespace ImbueDurationManager.Core
     {
         private const string OptionKeySeparator = "||";
         private const float UpdateIntervalSeconds = 0.15f;
-        private const float StartupOverwriteWatchSeconds = 8f;
 
         public static IDMModOptionSync Instance { get; } = new IDMModOptionSync();
 
@@ -20,9 +19,6 @@ namespace ImbueDurationManager.Core
         private bool initialized;
         private float nextUpdateTime;
         private int lastPresetHash;
-        private int startupSourceOfTruthHash;
-        private bool startupOverwriteWatchActive;
-        private float startupOverwriteWatchEndTime;
 
         private IDMModOptionSync()
         {
@@ -33,9 +29,6 @@ namespace ImbueDurationManager.Core
             initialized = false;
             nextUpdateTime = 0f;
             lastPresetHash = int.MinValue;
-            startupSourceOfTruthHash = int.MinValue;
-            startupOverwriteWatchActive = false;
-            startupOverwriteWatchEndTime = 0f;
             modData = null;
             modOptionsByKey.Clear();
 
@@ -45,15 +38,7 @@ namespace ImbueDurationManager.Core
                 return;
             }
 
-            bool changed = ApplyPresetsIfChanged(force: true);
-            if (changed)
-            {
-                ModManager.RefreshModOptionsUI();
-            }
-
-            startupSourceOfTruthHash = IDMModOptions.GetSourceOfTruthHash();
-            startupOverwriteWatchActive = true;
-            startupOverwriteWatchEndTime = Time.unscaledTime + StartupOverwriteWatchSeconds;
+            lastPresetHash = IDMModOptions.GetPresetSelectionHash();
         }
 
         public void Shutdown()
@@ -62,9 +47,6 @@ namespace ImbueDurationManager.Core
             modData = null;
             modOptionsByKey.Clear();
             lastPresetHash = int.MinValue;
-            startupSourceOfTruthHash = int.MinValue;
-            startupOverwriteWatchActive = false;
-            startupOverwriteWatchEndTime = 0f;
         }
 
         public void Update()
@@ -77,11 +59,7 @@ namespace ImbueDurationManager.Core
                     return;
                 }
 
-                bool initChanged = ApplyPresetsIfChanged(force: true);
-                if (initChanged)
-                {
-                    ModManager.RefreshModOptionsUI();
-                }
+                lastPresetHash = IDMModOptions.GetPresetSelectionHash();
                 return;
             }
 
@@ -94,40 +72,12 @@ namespace ImbueDurationManager.Core
             nextUpdateTime = now + UpdateIntervalSeconds;
             bool changed = false;
 
-            changed |= ReapplyPresetsIfStartupOverwriteDetected(now);
             changed |= ApplyPresetsIfChanged(force: false);
 
             if (changed)
             {
                 ModManager.RefreshModOptionsUI();
             }
-        }
-
-        private bool ReapplyPresetsIfStartupOverwriteDetected(float now)
-        {
-            if (!startupOverwriteWatchActive)
-            {
-                return false;
-            }
-
-            if (now > startupOverwriteWatchEndTime)
-            {
-                startupOverwriteWatchActive = false;
-                return false;
-            }
-
-            int currentHash = IDMModOptions.GetSourceOfTruthHash();
-            if (currentHash == startupSourceOfTruthHash)
-            {
-                return false;
-            }
-
-            bool changed = ApplyPresetsIfChanged(force: true);
-            startupSourceOfTruthHash = IDMModOptions.GetSourceOfTruthHash();
-            startupOverwriteWatchActive = false;
-
-            IDMLog.Info("Detected post-load mod-option overwrite; re-applied selected presets once.", true);
-            return changed;
         }
 
         private void TryInitialize()
