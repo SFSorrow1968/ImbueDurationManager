@@ -1,4 +1,4 @@
-﻿# Agent Instructions
+# Agent Instructions
 
 ## 1. Central Planning (START HERE)
 **Goal**: Minimize noise. Only read what you need.
