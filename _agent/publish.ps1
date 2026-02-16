@@ -49,8 +49,8 @@ dotnet build -c Release
 dotnet build -c Nomad
 
 # Verify Build Artifacts
-if (-not (Test-Path "bin/PCVR/Imbue Duration Manager/Imbue Duration Manager.dll")) { Write-Error "PCVR Build Failed: DLL not found." }
-if (-not (Test-Path "bin/Nomad/Imbue Duration Manager/Imbue Duration Manager.dll")) { Write-Error "Nomad Build Failed: DLL not found." }
+if (-not (Test-Path "bin/PCVR/ImbueDurationManager/ImbueDurationManager.dll")) { Write-Error "PCVR Build Failed: DLL not found." }
+if (-not (Test-Path "bin/Nomad/ImbueDurationManager/ImbueDurationManager.dll")) { Write-Error "Nomad Build Failed: DLL not found." }
 
 # 4. Package
 Write-Host "4. Packaging..." -ForegroundColor Cyan
@@ -60,8 +60,8 @@ $nomadZip = "Imbue Duration Manager_Nomad_v$version.zip"
 if (Test-Path $pcvrZip) { Remove-Item $pcvrZip }
 if (Test-Path $nomadZip) { Remove-Item $nomadZip }
 
-Compress-Archive -Path "bin/PCVR/Imbue Duration Manager/*" -DestinationPath $pcvrZip
-Compress-Archive -Path "bin/Nomad/Imbue Duration Manager/*" -DestinationPath $nomadZip
+Compress-Archive -Path "bin/PCVR/ImbueDurationManager/*" -DestinationPath $pcvrZip
+Compress-Archive -Path "bin/Nomad/ImbueDurationManager/*" -DestinationPath $nomadZip
 
 Write-Host "   Created $pcvrZip" -ForegroundColor Green
 Write-Host "   Created $nomadZip" -ForegroundColor Green
